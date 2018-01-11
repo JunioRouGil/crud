@@ -1,0 +1,10 @@
+<script>
+    function confirmacao(id) {
+        var resposta = confirm("Tem certeza que deseja remover este registro?");
+        if (resposta == true) {
+            window.location.href = "excluirUsuario.php?codigo=" + id;
+        } else {
+            window.location.href = "usuarios.php";
+        }
+    }
+</script>
