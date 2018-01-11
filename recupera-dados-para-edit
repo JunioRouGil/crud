@@ -1,0 +1,15 @@
+<?php
+    $result_usuario = "SELECT
+    USUARIO.* FROM TB_USUARIO 
+    WHERE
+    USUARIO.IDUSUARIO = '$codigo'";
+
+    $resultado_usuario = mysqli_query($connect, $result_usuario) or die(mysqli_error($connect));
+    $qtdResultados = mysqli_num_rows($resultado_usuario);
+    
+    while ($resultado = mysqli_fetch_assoc($resultado_usuario)){
+            $nome        = $resultado['NMUSUARIO'];
+            $email       = $resultado['EMAIL'];
+            $status      = $resultado['STUSUARIO'];
+    };
+    
