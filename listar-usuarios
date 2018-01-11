@@ -1,0 +1,102 @@
+<?php
+include 'model/connect.php';
+            // verifica a pagina atual caso seja informada na URL, senao atribui como 1a pagina
+            $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
+
+    // Se houver filtro/busca não será mostrada paginação
+    if (isset($_POST['pesq'])) {    
+            $pesq = $_POST['pesq'];
+            $coluna = $_POST['coluna'];
+            $pesq = trim($pesq);
+
+            echo' <fieldset>
+                    <legend><i class="fa fa-angle-right"></i> Exibindo resultados da busca por: </span><span class="text-success"> '.$pesq.'</legend>
+                    <p><i class="fa fa-angle-right"></i> <a href="usuarios.php"> Ver todos os registros</a></p>
+
+                </fieldset>';
+            $busca = "SELECT * FROM USUARIO  where $coluna like '%$pesq%' ";
+            $usuarios = mysqli_query($connect, $busca) or die(mysqli_error($connect));
+            $total = mysqli_num_rows($usuarios);
+            
+            // Zerando a paginação para os casos de pesquisa filtrada
+            $numPaginas = 0;
+            // Selecionando os itens que serão exibidos na pagina
+            $exibir = "SELECT * FROM USUARIO  where $coluna like '%$pesq%'";
+            $exibirUsuarios = mysqli_query($connect, $exibir) or die(mysqli_error($connect));
+            $exibirTotal = mysqli_num_rows($exibirUsuarios);
+               
+        // Exibe os resultados encontrados
+        while ($row_usuario = mysqli_fetch_assoc($exibirUsuarios)) {
+            $id = $row_usuario['IDUSUARIO'];
+            $nome = $row_usuario['NMUSUARIO'];
+            $email = $row_usuario['EMAIL'];
+            $status = $row_usuario['STUSUARIO'];
+                switch ($status) {
+                    case 1:
+                          $status = "<span class='label label-success'>Ativo</span>";
+                    break;
+                    case 0:
+                          $status = "<span class='label label-danger'>Inativo</span>";
+                    break;
+                    default:
+                          $status = "<span class='label label-info'>Outro</span>";
+            }
+                echo "<tr>
+                        <td class='text-center'><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>" . $id . "</a></td>
+                        <td class='text-center'><strong><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>".$nome."</a></strong></td>
+                        <td class='text-center'><strong><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>".$email."</a></strong></td>
+                        <td class='text-center'><span class='label label-info'>".$papel."</span></td>
+                        <td class='text-center'>".$status."</td>
+                        <td class='text-center'>
+                            <a href='editarUsuario.php?codigo=$id' data-toggle='tooltip' title='Editar Usuário' class='btn btn-effect-ripple btn-xs btn-info'><i class='fa fa-pencil'></i></a>
+                            <a href='#' onclick='confirmacao($id)' title='Deletar Usuário' class='btn btn-effect-ripple btn-xs btn-danger'><i class='fa fa-times'></i></a>
+                        </td>
+                    </tr>";
+        }
+    }else{
+            $busca = "SELECT * FROM USUARIO ";
+            $usuarios = mysqli_query($connect, $busca) or die(mysqli_error($connect));
+            // total de registros
+            $total = mysqli_num_rows($usuarios);
+            
+            // seta a quantidade de itens por pagina, neste caso, 10 itens
+            $registros = 10;
+            // calcula o numero de paginas arredondando o resultado para cima
+            $numPaginas = ceil($total/$registros);
+            // variavel para calcular o inicio da visualização com base na página atual
+            $inicio = ($registros*$pagina)-$registros;
+            // itens que serão exibidos por pagina
+            $exibir = "SELECT * FROM USUARIO  ORDER BY IDUSUARIO LIMIT $inicio,$registros";
+            $exibirUsuarios = mysqli_query($connect, $exibir) or die(mysqli_error($connect));
+            $exibirTotal = mysqli_num_rows($exibirUsuarios);     
+         
+        //exibe os usuarios encontrados
+        while ($row_usuario = mysqli_fetch_assoc($exibirUsuarios)) {
+            $id = $row_usuario['IDUSUARIO'];
+            $nome = $row_usuario['NMUSUARIO'];
+            $email = $row_usuario['EMAIL'];
+            $status = $row_usuario['STUSUARIO'];
+                switch ($status) {
+                    case 1:
+                          $status = "<span class='label label-success'>Ativo</span>";
+                    break;
+                    case 0:
+                          $status = "<span class='label label-danger'>Inativo</span>";
+                    break;
+                    default:
+                          $status = "<span class='label label-info'>Outro</span>";
+                }
+                echo "<tr>
+                        <td class='text-center'><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>" . $id . "</a></td>
+                        <td class='text-center'><strong><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>".$nome."</a></strong></td>
+                        <td class='text-center'><strong><a title='Editar Usuário' href='editarUsuario.php?codigo=$id'>".$email."</a></strong></td>
+                        <td class='text-center'><span class='label label-info'>".$papel."</span></td>
+                        <td class='text-center'>".$status."</td>
+                        <td class='text-center'>
+                            <a href='editarUsuario.php?codigo=$id' data-toggle='tooltip' title='Editar Usuário' class='btn btn-effect-ripple btn-xs btn-info'><i class='fa fa-pencil'></i></a>
+                            <a href='#' onclick='confirmacao($id)' title='Deletar Usuário' class='btn btn-effect-ripple btn-xs btn-danger'><i class='fa fa-times'></i></a>
+                        </td>
+                    </tr>";
+        }      
+    }
+?>
