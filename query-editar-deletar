@@ -1,0 +1,11 @@
+// edit
+
+<?php
+    $update = "UPDATE USUARIO SET NMUSUARIO='$nome', EMAIL='$email', SENHA='$strSenha', STUSUARIO='$status' WHERE IDUSUARIO='$codigo'";
+?>
+
+// delete
+<?php
+    $excluir = "DELETE FROM USUARIO WHERE IDUSUARIO='$codigo' ";
+?>
+
