@@ -1,0 +1,29 @@
+<?php
+            $nome         = $_REQUEST['USUARIO'];
+            $email        = $_REQUEST['EMAIL'];
+            $senha        = $_REQUEST['SENHA'];
+            $encryptSenha = sha1($senha);
+            if(empty($_REQUEST['STUSUARIO']) || $_REQUEST['STUSUARIO'] == ''){
+                $status  = '0';
+            }else{
+                $status  = '1';
+            }
+            $dtcriacao = date("Y-m-d H:i:s");
+            
+    include '../model/connect.php';
+    include '../model/queryCriarUsuario.php';
+    
+    if($msg == NULL){
+        if($connect->query($insert) === TRUE){
+                echo "<script>alert('Criado com sucesso!') </script> ";
+                echo "<script>self.location='../usuarios.php' </script> ";
+        }else{
+                echo "<script>alert('Ocorreu um erro ao criar o usuário!') </script> ";
+                echo "<script>self.location='../usuarios.php' </script> ";
+                die($connect->error);
+        }
+    }else{
+        echo "<script>alert('$msg')</script> ";
+        echo "<script>self.location='../criarUsuario.php' </script> ";
+    }
+?>
