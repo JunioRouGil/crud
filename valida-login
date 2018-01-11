@@ -1,0 +1,8 @@
+<?php 
+    $usuario = mysqli_real_escape_string($connect, $_POST['usuario']);
+    $senha   = mysqli_real_escape_string($connect, $_POST['senha']);
+    // Validação do usuário/senha digitados
+    $result_usuario = "SELECT * FROM USUARIO WHERE EMAIL = '". $usuario ."' AND SENHA = '" . sha1($senha) . "' AND STUSUARIO = 1 LIMIT 1";
+    $resultado_usuario = mysqli_query($connect, $result_usuario) or die(mysqli_error($connect));
+    $resultado = mysqli_fetch_assoc($resultado_usuario);
+?>
