@@ -1,0 +1,14 @@
+<?php
+        /* Dados de acesso ao banco */
+        $host = 'localhost';
+        $user = '';
+        $senha = '';
+        $dbase = '';
+        $port = 3306;
+        
+        $connect = mysqli_connect($host, $user, $senha, $dbase, $port);
+        if (mysqli_connect_error($connect)) {
+            echo 'Me desculpe, não foi possível acessar o Banco de Dados.';
+        }  else {
+           //echo 'Conexão bem sucedida!'; 
+        }
