@@ -1,0 +1,15 @@
+// Query Criar
+
+<?php
+    $consulta  = "SELECT * FROM USUARIO where EMAIL like '$email' ";
+    $executar  = mysqli_query($connect, $consulta) or die(mysqli_error($connect));
+    $resultado = mysqli_num_rows($executar);
+    
+    if( $resultado == 0 ){
+        $msg    = NULL;
+        $insert = "INSERT INTO USUARIO (IDUSUARIO, STUSUARIO,NMUSUARIO,EMAIL,SENHA, USU_DTCRIACAO)
+                   VALUES ('NULL', '$status' , '$nome', '$email', '$encryptSenha', '$dtcriacao')"; 
+    }else{
+        $msg = 'ERRO: Este E-mail/Usuário já está cadastrado no sistema!';
+    }
+?>
